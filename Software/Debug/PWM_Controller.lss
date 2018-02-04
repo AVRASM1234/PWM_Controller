@@ -3,31 +3,31 @@ PWM_Controller.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         000001c4  00000000  00000000  00000074  2**1
+  0 .text         000001ca  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000000  00800060  00800060  00000238  2**0
+  1 .data         00000000  00800060  00800060  0000023e  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000002  00800060  00800060  00000238  2**0
+  2 .bss          00000002  00800060  00800060  0000023e  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  00000238  2**0
+  3 .comment      00000030  00000000  00000000  0000023e  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000268  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000270  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000028  00000000  00000000  000002a4  2**0
+  5 .debug_aranges 00000028  00000000  00000000  000002ac  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000488  00000000  00000000  000002cc  2**0
+  6 .debug_info   00000490  00000000  00000000  000002d4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000003cd  00000000  00000000  00000754  2**0
+  7 .debug_abbrev 000003d0  00000000  00000000  00000764  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000275  00000000  00000000  00000b21  2**0
+  8 .debug_line   000001c5  00000000  00000000  00000b34  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000048  00000000  00000000  00000d98  2**2
+  9 .debug_frame  00000048  00000000  00000000  00000cfc  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000002e6  00000000  00000000  00000de0  2**0
+ 10 .debug_str    000002d9  00000000  00000000  00000d44  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000086  00000000  00000000  000010c6  2**0
+ 11 .debug_loc    00000086  00000000  00000000  0000101d  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000018  00000000  00000000  0000114c  2**0
+ 12 .debug_ranges 00000018  00000000  00000000  000010a3  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -42,7 +42,7 @@ Disassembly of section .text:
    c:	91 c0       	rjmp	.+290    	; 0x130 <__bad_interrupt>
    e:	90 c0       	rjmp	.+288    	; 0x130 <__bad_interrupt>
   10:	8f c0       	rjmp	.+286    	; 0x130 <__bad_interrupt>
-  12:	c2 c0       	rjmp	.+388    	; 0x198 <__vector_9>
+  12:	c5 c0       	rjmp	.+394    	; 0x19e <__vector_9>
 
 00000014 <PerToFill>:
   14:	00 00 00 00 00 01 01 01 01 01 01 01 01 01 01 01     ................
@@ -82,7 +82,7 @@ Disassembly of section .text:
  128:	b2 07       	cpc	r27, r18
  12a:	e1 f7       	brne	.-8      	; 0x124 <.do_clear_bss_loop>
  12c:	02 d0       	rcall	.+4      	; 0x132 <main>
- 12e:	48 c0       	rjmp	.+144    	; 0x1c0 <_exit>
+ 12e:	4b c0       	rjmp	.+150    	; 0x1c6 <_exit>
 
 00000130 <__bad_interrupt>:
  130:	67 cf       	rjmp	.-306    	; 0x0 <__vectors>
@@ -190,47 +190,50 @@ int main(void)
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 18a:	eb e4       	ldi	r30, 0x4B	; 75
- 18c:	fd e1       	ldi	r31, 0x1D	; 29
- 18e:	31 97       	sbiw	r30, 0x01	; 1
- 190:	f1 f7       	brne	.-4      	; 0x18e <main+0x5c>
- 192:	00 c0       	rjmp	.+0      	; 0x194 <main+0x62>
- 194:	00 00       	nop
- 196:	df cf       	rjmp	.-66     	; 0x156 <main+0x24>
+ 18a:	3f ef       	ldi	r19, 0xFF	; 255
+ 18c:	46 e7       	ldi	r20, 0x76	; 118
+ 18e:	81 e0       	ldi	r24, 0x01	; 1
+ 190:	31 50       	subi	r19, 0x01	; 1
+ 192:	40 40       	sbci	r20, 0x00	; 0
+ 194:	80 40       	sbci	r24, 0x00	; 0
+ 196:	e1 f7       	brne	.-8      	; 0x190 <main+0x5e>
+ 198:	00 c0       	rjmp	.+0      	; 0x19a <main+0x68>
+ 19a:	00 00       	nop
+ 19c:	dc cf       	rjmp	.-72     	; 0x156 <main+0x24>
 
-00000198 <__vector_9>:
+0000019e <__vector_9>:
 		_delay_ms(50);	
     }
 }
 
 ISR(ADC_vect)
 {
- 198:	1f 92       	push	r1
- 19a:	0f 92       	push	r0
- 19c:	0f b6       	in	r0, 0x3f	; 63
- 19e:	0f 92       	push	r0
- 1a0:	11 24       	eor	r1, r1
- 1a2:	ef 93       	push	r30
- 1a4:	ff 93       	push	r31
+ 19e:	1f 92       	push	r1
+ 1a0:	0f 92       	push	r0
+ 1a2:	0f b6       	in	r0, 0x3f	; 63
+ 1a4:	0f 92       	push	r0
+ 1a6:	11 24       	eor	r1, r1
+ 1a8:	ef 93       	push	r30
+ 1aa:	ff 93       	push	r31
 	// Когда закончим АЦ преобразование - пхаем в регистр ШИМ преобразованное значение яркости свечения в заполненость ШИМ (сам не понял что написал...)
 	OCR0A = pgm_read_byte(&PerToFill[ADCH]);
- 1a6:	e5 b1       	in	r30, 0x05	; 5
- 1a8:	f0 e0       	ldi	r31, 0x00	; 0
- 1aa:	ec 5e       	subi	r30, 0xEC	; 236
- 1ac:	ff 4f       	sbci	r31, 0xFF	; 255
- 1ae:	e4 91       	lpm	r30, Z
- 1b0:	e6 bf       	out	0x36, r30	; 54
+ 1ac:	e5 b1       	in	r30, 0x05	; 5
+ 1ae:	f0 e0       	ldi	r31, 0x00	; 0
+ 1b0:	ec 5e       	subi	r30, 0xEC	; 236
+ 1b2:	ff 4f       	sbci	r31, 0xFF	; 255
+ 1b4:	e4 91       	lpm	r30, Z
+ 1b6:	e6 bf       	out	0x36, r30	; 54
 }
- 1b2:	ff 91       	pop	r31
- 1b4:	ef 91       	pop	r30
- 1b6:	0f 90       	pop	r0
- 1b8:	0f be       	out	0x3f, r0	; 63
- 1ba:	0f 90       	pop	r0
- 1bc:	1f 90       	pop	r1
- 1be:	18 95       	reti
+ 1b8:	ff 91       	pop	r31
+ 1ba:	ef 91       	pop	r30
+ 1bc:	0f 90       	pop	r0
+ 1be:	0f be       	out	0x3f, r0	; 63
+ 1c0:	0f 90       	pop	r0
+ 1c2:	1f 90       	pop	r1
+ 1c4:	18 95       	reti
 
-000001c0 <_exit>:
- 1c0:	f8 94       	cli
+000001c6 <_exit>:
+ 1c6:	f8 94       	cli
 
-000001c2 <__stop_program>:
- 1c2:	ff cf       	rjmp	.-2      	; 0x1c2 <__stop_program>
+000001c8 <__stop_program>:
+ 1c8:	ff cf       	rjmp	.-2      	; 0x1c8 <__stop_program>

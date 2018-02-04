@@ -4,7 +4,7 @@
  * Created: 18.01.2018 22:08:13
  * Author : AVRASM1234
  */ 
-#define F_CPU			4800000UL/8
+#define F_CPU			9600000UL
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
